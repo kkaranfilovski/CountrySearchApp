@@ -1,0 +1,16 @@
+header {
+    text-align: center;
+}
+
+#search-cont {
+    display: flex;
+    justify-content: center;
+}
+
+th {
+    width: 50px;
+}
+
+.sortable-th {
+    cursor: pointer;
+}
