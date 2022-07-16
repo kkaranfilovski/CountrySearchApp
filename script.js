@@ -23,7 +23,7 @@ async function getCountryData(url) {
         return await fetch(url).then(response => response.json())
     }
     catch (err) {
-        console.log(err)
+        console.log(err);
     }
     finally {
         loading.style.display = 'none'
@@ -34,18 +34,18 @@ function showCountries(country) {
 
     listCountries.innerHTML = '';
     let table = document.createElement('table');
-    table.setAttribute('class', 'table table-bordered');
+    table.setAttribute('class', 'table table-dark table-hover');
 
     let thead = document.createElement('thead')
     thead.innerHTML = `
     <tr> 
-        <th> Flag </th>
-        <th value='namea' class='sortable-th'> Name </th>
-        <th value='populationa' class='sortable-th'> Population </th>
-        <th value='areaa' class='sortable-th'> Area </th>
-        <th> capital </th>
-        <th> Languages </th> 
-        <th> Currency </th> 
+        <th class="text-center align-middle"> Flag </th>
+        <th value='namea' class='sortable-th text-center align-middle'> Name </th>
+        <th value='populationa' class='sortable-th text-center align-middle'> Population </th>
+        <th value='areaa' class='sortable-th text-center align-middle'> Area </th>
+        <th class="text-center align-middle"> Capital </th>
+        <th class="text-center align-middle"> Languages </th> 
+        <th class="text-center align-middle"> Currency </th> 
     </tr>`
 
     let tbody = document.createElement('tbody')
@@ -53,13 +53,13 @@ function showCountries(country) {
     country.forEach(country => {
         let tableRow = document.createElement('tr');
         tableRow.innerHTML = `
-        <td>  <img src="${country.flag}" alt="flag" height = 30px>  </td>
-        <td> ${country.name} </td>
-        <td> ${country.population} </td>
-        <td> ${country.area !== undefined ? country.area : 'N/A'} </td>
-        <td> ${country.capital !== undefined ? country.capital : 'N/A'} </td>
-        <td> ${country.languages?.map(lang => lang.name).join(', ') || 'N/A'} </td> 
-        <td> ${country.currencies?.map(currency => currency.name).join(', ') || 'N/A'}  </td>
+        <td class="text-center align-middle">  <img src="${country.flag}" alt="flag">  </td>
+        <td class="text-center align-middle"> ${country.name} </td>
+        <td class="text-center align-middle"> ${country.population.toLocaleString('en-Us')} </td>
+        <td class="text-center align-middle"> ${country.area !== undefined ? country.area.toLocaleString('en-Us') : 'N/A'} </td>
+        <td class="text-center align-middle"> ${country.capital !== undefined ? country.capital : 'N/A'} </td>
+        <td class="text-center align-middle"> ${country.languages?.map(lang => lang.name).join(', ') || 'N/A'} </td> 
+        <td class="text-center align-middle"> ${country.currencies?.map(currency => currency.name).join(', ') || 'N/A'}  </td>
         `
         tbody.appendChild(tableRow)
     });
@@ -105,6 +105,9 @@ function handleFilterError(htmlElement) {
 
 searchButton.addEventListener('click', async () => {
     let value = searchField.value
+    if(value === undefined){
+        document.getElementById("errorSpan").innerText = "Please enter a value"
+    }
     reusable.countriesArr = await getCountryData(apiUrls.nameUrl + value)
 
     showCountries(reusable.countriesArr)
@@ -113,9 +116,7 @@ searchButton.addEventListener('click', async () => {
 // event for sorting the table;
 
 listCountries.addEventListener('click', (e) => {
-
-    if (e.target.className === 'sortable-th') {
-
+    if (e.target.attributes[1].value === 'sortable-th text-center align-middle') {
         if (reusable.sortBy === null || reusable.sortBy.charAt(1) !== e.target.attributes[0].value.charAt(1)) {
             reusable.sortBy = e.target.attributes[0].value
         }
